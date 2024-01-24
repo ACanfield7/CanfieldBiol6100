@@ -1,5 +1,5 @@
 ---
-title: "index"
+title: "Index"
 author: "Anushka Canfield"
 date: "2024-01-24"
 output: html_document
@@ -9,4 +9,4 @@ output: html_document
 knitr::opts_chunk$set(echo = TRUE)
 ```
 
-[homework 02](https://github.com/ACanfield7/CanfieldBiol6100/blob/main/homework_02.Rmd)
+[Homework 02](https://github.com/ACanfield7/CanfieldBiol6100/blob/main/homework_02.Rmd)
