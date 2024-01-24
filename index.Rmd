@@ -9,3 +9,4 @@ output: html_document
 knitr::opts_chunk$set(echo = TRUE)
 ```
 
+[homework 02](https://acanfield7.github.io/CanfieldBiol6100/)
