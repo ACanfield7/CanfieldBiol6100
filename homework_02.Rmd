@@ -1,5 +1,5 @@
 ---
-title: "homework_02"
+title: "Homework 02"
 output: html_document
 date: "2024-01-19"
 ---
@@ -9,10 +9,12 @@ knitr::opts_chunk$set(echo = TRUE)
 ```
 
 ### Anushka's Fun Fact:
+#### She has seven nicknames: Nush, Nushie, Nushk, Nushkanator, Skanush, Skadoosh, and Anna
 
-### She has seven nicknames: Nush, Nushie, Nushk, Nushkanator, Skanush, Skadoosh, and Anna
+
+### Anushka's Reposity:
+#### https://github.com/ACanfield7
 
 ### Anushka's Website:
-
-### https://github.com/ACanfield7/CanfieldBiol6100/blob/main/homework_02.Rmd
+#### https://github.com/ACanfield7/CanfieldBiol6100/blob/main/homework_02.Rmd
 
