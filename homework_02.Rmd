@@ -16,5 +16,5 @@ knitr::opts_chunk$set(echo = TRUE)
 #### https://github.com/ACanfield7
 
 ### Anushka's Website:
-#### https://acanfield7.github.io/CanfieldBiol6100/
+#### https://github.com/ACanfield7/CanfieldBiol6100/blob/main/homework_02.Rmd
 
