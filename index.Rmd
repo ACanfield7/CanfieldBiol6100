@@ -1,12 +1,22 @@
 ---
-title: "Index"
+title: "Biol 6100 Portfolio"
 author: "Anushka Canfield"
-date: "2024-01-24"
-output: html_document
+date: "Spring 2024"
+output: 
+  html_document: 
+    theme: spacelab
 ---
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
 ```
+#
 
+#### **Blurb**
+
+Hello! My name is Anushka and I am a Junior at UVM with a major in Molecular Genetics and a minor in Bioinformatics. I plan to graduate Fall 2024 and I will hopefully get accepted into a PHD research program.
+
+#
+
+#### **Assignments:**
 [Homework 02](https://github.com/ACanfield7/CanfieldBiol6100/blob/main/homework_02.Rmd)
