@@ -19,4 +19,23 @@ Hello! My name is Anushka and I am a Junior at UVM with a major in Molecular Gen
 #
 
 #### **Assignments:**
-[Homework 02](https://github.com/ACanfield7/CanfieldBiol6100/blob/main/homework_02.Rmd)
+- [Homework 01]()
+- [Homework 02](https://github.com/ACanfield7/CanfieldBiol6100/blob/main/homework_02.html)
+- [Homework 03]()
+- Homework 04
+- Homework 05
+- Homework 06
+- Homework 07
+- Homework 08
+- Homework 09
+- Homework 10
+- Homework 11
+- Homework 12
+
+
+
+
+
+
+
+
