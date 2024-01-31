@@ -1,0 +1,114 @@
+---
+title: "Homework 03"
+author: "Anushka Canfield"
+date: "2024-01-31"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+### Question One: 
+#### Transform lines into a proper format for .csv
+```
+STRING:
+First String    Second      1.22      3.4
+Second          More Text   1.555555  2.2220
+Third           x           124
+
+SEARCH: \s{2,}
+REPLACE:,
+RESULT:It replaces any spaces that have at least two consecutive spaces with a comma
+```
+
+### Question Two: 
+#### Transform conflict list into a different format
+```
+STRING:
+Ballif, Bryan, University of Vermont
+Ellison, Aaron, Harvard Forest
+Record, Sydne, Bryn Mawr
+  
+SEARCH:(\w+), (\w+), (\w+.*)
+REPLACE:\2 \1 (\3)
+RESULT: Each word in the sentence was assigned a number value. I reordered the number values to get to the correct form
+```
+### Question Three:
+#### Transform the single sentence of song names into multiple sentences
+
+```
+STRING: 
+0001 Georgia Horseshoe.mp3 0002 Billy In The Lowground.mp3 0003 Winder Slide.mp3 0004 Walking Cane.mp3
+
+
+SEARCH: \s
+REPLACE: \n
+RESULT: I naviagate to the specific space that I want a linebreak. There are two in total. 
+
+```
+
+### Question Four:
+#### Transform the list of tunes so that the last four digits are at the end
+
+```
+STRING:
+0001 Georgia Horseshoe.mp3
+0002 Billy In The Lowground.mp3
+0003 Winder Slide.mp3
+0004 Walking Cane.mp3
+
+SEARCH:(\d{4}) (\w.*)\.(\w+)
+REPLACE:\2_\1.\3
+RESULT: Assigned boundaries around the four digits, the song name, and the file name. I rearranged the sentence, added an underscore between the name and four digits, and added a period before the file name. 
+```
+### Question Five:
+#### Transform the data frame into the dataset format
+
+```
+STRING:
+Camponotus,pennsylvanicus,10.2,44
+Camponotus,herculeanus,10.5,3
+Myrmica,punctiventris,12.2,4
+Lasius,neoniger,3.3,55
+
+SEARCH:(\w)\w+,(\w+),(\d+\.+\d),(\d+)
+REPLACE:\1_\2,\4
+RESULT: Assigned boundaries around the first letter of the genus, the entire species, the first of the two numeric values, and the last numeric value. I added an underscore inbetween the first boundary and the second, and added a comma inbetween the second boundary and fourth boundary. The third boundary was not replaced. 
+
+```
+
+### Question Six:
+#### Transform the data frame into a different dataset format 
+
+```
+STRING:
+Camponotus,pennsylvanicus,10.2,44
+Camponotus,herculeanus,10.5,3
+Myrmica,punctiventris,12.2,4
+Lasius,neoniger,3.3,55
+
+
+SEARCH:(\w)\w+,(\w{4})\w+,\d+.\d,(\d+)
+REPLACE:\1_\2,\5
+RESULT: I put boundaries around the capital leter of the genus, the first four letters of the species, and the second numeric number to get the desired format. 
+
+```
+
+### Question Seven:
+#### Transform the dataframe into a reversed format
+
+```
+STRING:
+Camponotus,pennsylvanicus,10.2,44
+Camponotus,herculeanus,10.5,3
+Myrmica,punctiventris,12.2,4
+Lasius,neoniger,3.3,55
+
+
+SEARCH:(\w{3})\w+,(\w{3})\w+,(\d+.\d+),(\d+)
+REPLACE:\1\2, \4, \3
+RESULT: I put boundaries around the first three characters of the genus and of the species, and of each numeric value. I rearranged the order to reflect the dataset desired. 
+```
+
+
