@@ -22,7 +22,7 @@ Hello! My name is Anushka and I am a Junior at UVM with a major in Molecular Gen
 - [Homework 01]()
 - [Homework 02](homework_02.html)
 - [Homework 03](homework_03.html)
-- [Homework 04](homeowork_04.html)
+- [Homework 04](homework_04.html)
 - Homework 05
 - Homework 06
 - Homework 07
