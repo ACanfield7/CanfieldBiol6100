@@ -52,7 +52,6 @@ print(p1)
 
 ```{r}
 ## Normal Parameters
-
 normPars <- fitdistr(z$NEE,"normal")
 print(normPars)
 str(normPars)
