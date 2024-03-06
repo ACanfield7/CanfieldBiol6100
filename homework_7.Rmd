@@ -1,0 +1,33 @@
+---
+title: "Homework 7"
+author: "Anushka Canfield"
+date: "2024-03-06"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+
+# Loading Libraries
+```{r}
+library(tidyvers)
+
+```
+
+
+```{r}
+## Number of Treatment Groups
+nGroup <- 8
+## Names of each Group
+nName <-c("Control_Mock-1", "Control_Mock-2", "Control_Drug-1", "Control_Drug-2", "5Day_Mock-1","5Day_Mock-2","5Day_Drug-1", "5Day_Drug-2")
+#Number of observations per group
+nSize <- c(10, 10, 10, 10, 10, 10, 10, 10, 10)
+## Mean of total cell count in each group
+nMean <- c(501, 622, 689, 527, 42, 38, 475, 498)  
+## nu
+nSD <- c(1, 1, 2, 2, 2, 2, 3, 3)
+
+
+```
