@@ -1,0 +1,157 @@
+---
+title: "Homework 4"
+author: "Anushka Canfield"
+date: "2024-02-08"
+output: html_document
+---
+
+
+### **Question One**: 
+```
+Assign each expression to the value of the variable z and print the value stored in z.
+```
+
+```{r}
+x <- 1.1
+a <- 2.2
+b <- 3.3
+``` 
+
+1.a 
+$z=x^{a^b}$ 
+```{r}
+z=x^{a^b}
+z
+```
+
+1.b 
+$z=(x^a)^b$  
+```{r}
+z =(x*(a*b))
+z
+```
+
+
+1.c 
+$3x^3 + 2x^2 + 1$ 
+```{r}
+z =3*(x*x*x) + 2*(x*x) + 1
+z
+```
+
+### **Question Two**: 
+```
+Use the rep and seq functions to create the vectors outlined:
+```
+2.a    (1, 2, 3, 4, 5, 6, 7, 8, 7, 6, 5, 4, 3, 2, 1)
+
+```{r}
+a <- c(seq(1:8), seq(7:1))
+a
+```
+
+
+2.b    (1, 2, 2, 3, 3, 3, 4, 4, 4, 4, 5, 5, 5, 5, 5)
+
+```{r}
+b <- rep(seq(1,5),times=seq(1,5))
+b
+```
+
+
+2.c    (5, 4, 4, 3, 3, 3, 2, 2, 2, 2, 1, 1, 1, 1, 1)
+
+```{r}
+c <- rep(seq(5,1),times=seq(1,5))
+c
+
+```
+
+### **Question Three: **
+
+```
+Create a vector of two random uniform numbers. In a spatial map, these can be interpreted as x and y coordinates that give the location of an individual (such as a marked forest tree in a plot that has been mapped). Using one of R’s inverse trigonometry functions (asin(), acos(), or atan()), convert these numbers into polar coordinates 
+```
+
+```{r}
+cartesian <- runif(2)    #X and Y
+
+x = cartesian[1]
+y = cartesian[2]
+
+r = sqrt((x^2 + y^2))
+theta = atan(y/x)
+
+paste("The polor coordinates are:", r, theta)
+```
+
+### **Question Four:**
+
+```
+The queue represents the animals and their order on Noah's Ark. Update the lineup as more animals appear. 
+```
+The queue:
+```{r}
+queue <- c("sheep", "fox", "owl", "ant")
+
+```
+
+4.a the serpent arrives and gets in line
+```{r}
+queue <- c(queue, "serpent")
+queue 
+```
+
+4.b the sheep enters the ark
+```{r}
+queue <- c(queue[-1])
+queue
+
+```
+
+4.c the donkey arrives and talks his way to the front of the line
+```{r}
+queue <- c("donkey",queue)
+queue
+```
+
+4.d the serpent gets impatient and leaves
+```{r}
+queue <- (queue[-(length(queue))])
+queue
+```
+
+4.e the owl gets bored and leaves
+```{r}
+queue <- c(queue[1], queue[2], queue[4])
+queue
+
+```
+
+4.f the aphid arrives and the ant invites him to cut in line.
+```{r}
+queue <- c(queue[1:2], "aphid", queue[3])
+queue
+```
+
+4.g Finally, determine the position of the aphid in the line.
+```{r}
+queue <- length(queue[-1])
+queue
+```
+
+### Question Five:
+
+```
+Use R to create a vector of all of the integers from 1 to 100 that are not divisible by 2, 3, or 7
+```
+
+```{r}
+
+n <- seq(1,100)
+
+vector <- which(n%% 2 & n %% 3 & n %% 7)
+vector
+```
+
+

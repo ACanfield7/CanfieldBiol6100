@@ -1,0 +1,108 @@
+---
+title: "Homework 10"
+author: "Anushka Canfield"
+date: "2024-04-12"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r}
+##############################
+# FUNCTION: Calculate Zeros in Given Vector
+# input: Vector List
+# output: Number of Zeros
+# -------------------
+calc_zeros <- function(vector_list){
+  counter <- 0
+  for (i in vector_list) {
+    if (i == 0)
+    counter <- counter + 1
+  }
+  return(counter)
+}
+##############################
+
+my_list <- c(10,0,0,0,0,5,7,0)
+my_list
+
+calc_zeros(vector_list = my_list)
+
+calc_zeros_subsetting <- function(vector_list) { sum(vector_list == 0) }
+calc_zeros_subsetting(my_list)
+
+```
+
+```{r}
+
+##############################
+# FUNCTION: Create a Matrix from Inputs
+# input: Number of rows and columns
+# output: the matrix
+# -------------------
+make_a_matrix <- function(vector, nRow, nCol){
+  matrix <- matrix(vector, nRow, nCol)
+  return(matrix)
+}
+##############################
+
+my_list <- sample(100,10)
+make_a_matrix(vector = my_list, nRow = 5, nCol = 6)
+
+```
+
+
+```{r}
+
+Write a custom function that 1) reshuffles the response variable, and 2) calculates the mean of each group in the reshuffled data. Store the means in a vector of length 3.
+
+##############################
+# FUNCTION: Reshuffle Data
+# input: Response Variables
+# output: a Vector
+# -------------------
+reshuffle_data <- function(dataset){
+  shuffle <- sample(dataset)
+  mean = colMeans(dataset)
+  return(mean)
+}
+
+simulte_dataset <- data.frame(group1, group2, group3)
+reshuffle_data(simulte_dataset)
+
+
+```
+
+
+```{r}
+
+##############################
+# FUNCTION: Reshuffle Data Using For Loop
+# input: Response Variables
+# output: a Vector
+# -------------------
+reshuffle_data <- function(dataset){
+  list <- list()
+  for (i in colnames(dataset)) {
+    shuffle <- sample(dataset$i)
+    mean_data <- mean(shuffle)
+    final_list <- append(list, mean_data)
+  }
+  
+  return(final_list)
+}
+##############################
+
+
+group1 <- runif(100)
+group2 <- runif(100)
+group3 <- runif(100)
+
+simulte_dataset <- data.frame(group1, group2, group3)
+reshuffle_data(simulte_dataset)
+
+
+```
+

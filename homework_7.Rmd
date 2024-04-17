@@ -1,0 +1,264 @@
+---
+title: "Homework 7"
+author: "Anushka Canfield"
+date: "2024-03-06"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+
+# Loading Libraries
+```{r}
+library(tidyverse)
+library(readxl)
+library(ggplot2)
+
+```
+
+# Task One 
+```
+Citation:
+
+Lightning-caused disturbance in the Peruvian Amazon
+Evan M. Gora, Stephen P. Yanoviak
+23 July 2020
+https://doi.org/10.1111/btp.12826
+
+```
+
+#Task Two
+```{r, Real Experiment}
+# Importing data set
+strikes <- read.csv(file="strikes_aggregated.csv", header = TRUE)
+strikes <- na.omit(strikes)
+head(strikes)
+summary(strikes)
+
+# Mean of original data
+mean(strikes$dmg.tree.count)
+mean(strikes$dead.tree.count)
+mean(strikes$total.tree.count)
+
+# Standard Deviation of original data
+sd(strikes$dmg.tree.count)
+sd(strikes$dead.tree.count)
+sd(strikes$total.tree.count)
+
+```
+
+```{r, ANOVA}
+#Data frame construction for original data
+nGroup <- 3
+nName <- c("Damaged Tree Count", "Dead Tree Count", "Total Tree Count")
+
+nSize <- nSize <- c(length(strikes$dmg.tree.count) , length(strikes$dead.tree.count), length(strikes$total.tree.count))
+
+nMean <-c(mean(strikes$dmg.tree.count), mean(strikes$dead.tree.count), mean(strikes$total.tree.count))
+
+nSD <- c(sd(strikes$dmg.tree.count), sd(strikes$dead.tree.count), sd(strikes$total.tree.count))
+
+#ID Vector for each row for original data
+ID <- 1:(sum(nSize))
+resVar <- c(rnorm(n=nSize[1],mean=nMean[1],sd=nSD[1]),
+            rnorm(n=nSize[2],mean=nMean[2],sd=nSD[2]),
+            rnorm(n=nSize[3],mean=nMean[3],sd=nSD[3]))
+TGroup <- rep(nName, nSize)
+ANOdata <- data.frame(ID, TGroup, resVar)
+str(ANOdata)
+
+
+# Plotting ANOVA box plot
+ANOPlot <- ggplot(data=ANOdata,aes(x=TGroup,y=resVar,fill=TGroup)) +
+           geom_boxplot()
+print(ANOPlot)
+
+# Creation of ANOVA model 
+ANOmodel <- aov(resVar~TGroup, data = ANOdata)
+print(ANOmodel)
+print(summary(ANOmodel))
+z <- summary(ANOmodel)
+str(z)
+
+# Obtaining F probability
+aggregate(resVar~TGroup,data=ANOdata,FUN=mean)
+unlist(z)
+unlist(z)[7]
+ANOsum <- list(Fval=unlist(z)[7],probF=unlist(z)[9])
+ANOsum
+
+
+```
+
+```
+Figure describes the original data. There are more damaged trees than dead trees which is a pattern seen worldwide when lightning strikes.
+```
+
+# Task Three
+```{r, Random Data Set: More Damaged Trees}
+#Data frame construction for fake data skewed towards damaged trees
+n = 133 #Same samples size as original data
+nGroup <- 3
+nName <- c("Damaged Tree Count", "Dead Tree Count", "Total Tree Count")
+nSize <- c(n,n,n)
+nMean <-c((0.75*6), (0.25*6), 6)
+nSD <- c((0.75*8), (0.25*8), 8)
+
+#ID Vector for Each Row
+ID <- 1:(sum(nSize))
+resVar <- c(rnorm(n=nSize[1],mean=nMean[1],sd=nSD[1]),
+            rnorm(n=nSize[2],mean=nMean[2],sd=nSD[2]),
+            rnorm(n=nSize[3],mean=nMean[3],sd=nSD[3]))
+TGroup <- rep(nName, nSize)
+ANOdata <- data.frame(ID, TGroup, resVar)
+str(ANOdata)
+
+# Creation of ANOVA model 
+ANOmodel <- aov(resVar~TGroup, data = ANOdata)
+print(ANOmodel)
+print(summary(ANOmodel))
+
+# Plotting ANOVA box plot
+ANOPlot <- ggplot(data=ANOdata,aes(x=TGroup,y=resVar,fill=TGroup)) +
+           geom_boxplot()
+print(ANOPlot)
+
+
+
+```
+
+
+```
+Figure describes the data skewed towards a higher number of damaged trees. There are multiple outliers. It is not often you would find more damaged treees than dead trees. 
+```
+
+```{r, Random Data Set: More Dead Trees}
+#Data frame construction for fake data skewed towards dead trees
+n = 133 #Same samples size as original data
+nGroup <- 3
+nName <- c("Damaged Tree Count", "Dead Tree Count", "Total Tree Count")
+nSize <- c(n,n,n)
+nMean <-c((0.25*6), (0.75*6), 6)
+nSD <- c((0.25*8), (0.75*8), 8)
+
+#ID Vector for Each Row
+ID <- 1:(sum(nSize))
+resVar <- c(rnorm(n=nSize[1],mean=nMean[1],sd=nSD[1]),
+            rnorm(n=nSize[2],mean=nMean[2],sd=nSD[2]),
+            rnorm(n=nSize[3],mean=nMean[3],sd=nSD[3]))
+TGroup <- rep(nName, nSize)
+ANOdata <- data.frame(ID, TGroup, resVar)
+str(ANOdata)
+
+# Creation of ANOVA model 
+ANOmodel <- aov(resVar~TGroup, data = ANOdata)
+print(ANOmodel)
+print(summary(ANOmodel))
+
+# Plotting ANOVA box plot
+ANOPlot <- ggplot(data=ANOdata,aes(x=TGroup,y=resVar,fill=TGroup)) +
+           geom_boxplot()
+print(ANOPlot)
+
+ANOmodel <- aov(resVar~TGroup, data = ANOdata)
+print(ANOmodel)
+print(summary(ANOmodel))
+z <- summary(ANOmodel)
+str(z)
+
+# Obtaining F probability
+aggregate(resVar~TGroup,data=ANOdata,FUN=mean)
+unlist(z)
+unlist(z)[7]
+ANOsum <- list(Fval=unlist(z)[7],probF=unlist(z)[9])
+ANOsum
+
+```
+```
+Figure describes the data skewed towards a higher number of dead trees. There are multiple outliers. It is not often you would find more or less dead trees in comparison to the amount of damaged trees.  
+```
+
+```{r, Different Means}
+
+#Data Frame Construction of fake data to find minimum mean necessary 
+n = 133 #Same samples size as original data
+nGroup <- 3
+nName <- c("Damaged Tree Count", "Dead Tree Count", "Total Tree Count")
+nSize <- c(n,n,n)
+nMean <-c((50), (51), 101)
+nSD <- c(1, 1, 1)
+
+#ID Vector for Each Row
+ID <- 1:(sum(nSize))
+resVar <- c(rnorm(n=nSize[1],mean=nMean[1],sd=nSD[1]),
+            rnorm(n=nSize[2],mean=nMean[2],sd=nSD[2]),
+            rnorm(n=nSize[3],mean=nMean[3],sd=nSD[3]))
+TGroup <- rep(nName, nSize)
+ANOdata <- data.frame(ID, TGroup, resVar)
+str(ANOdata)
+
+# Creation of ANOVA model 
+ANOmodel <- aov(resVar~TGroup, data = ANOdata)
+print(ANOmodel)
+print(summary(ANOmodel))
+z <- summary(ANOmodel)
+str(z)
+
+# Obtaining F probability
+aggregate(resVar~TGroup,data=ANOdata,FUN=mean)
+unlist(z)
+unlist(z)[7]
+ANOsum <- list(Fval=unlist(z)[7],probF=unlist(z)[9])
+ANOsum
+
+```
+```
+The minimum mean that can produce significant values while also maintaining the realtity that the sum of damaged trees and dead trees will be equal to the number of total trees. It is highly probable that you will find the range of damaged trees is similar to that of dead trees.  
+```
+
+
+```{r, Different Sample Size}
+
+#Data Frame Construction of fake data to find the minimum sample size needed
+nGroup <- 3
+nName <- c("Damaged Tree Count", "Dead Tree Count", "Total Tree Count")
+
+nSize <- c(11,11,11)
+
+nMean <-c(mean(strikes$dmg.tree.count), mean(strikes$dead.tree.count), mean(strikes$total.tree.count))
+
+nSD <- c(sd(strikes$dmg.tree.count), sd(strikes$dead.tree.count), sd(strikes$total.tree.count))
+
+#ID Vector for Each Row
+ID <- 1:(sum(nSize))
+resVar <- c(rnorm(n=nSize[1],mean=nMean[1],sd=nSD[1]),
+            rnorm(n=nSize[2],mean=nMean[2],sd=nSD[2]),
+            rnorm(n=nSize[3],mean=nMean[3],sd=nSD[3]))
+TGroup <- rep(nName, nSize)
+ANOdata <- data.frame(ID, TGroup, resVar)
+str(ANOdata)
+
+# Creation of ANOVA model 
+ANOmodel <- aov(resVar~TGroup, data = ANOdata)
+print(ANOmodel)
+print(summary(ANOmodel))
+z <- summary(ANOmodel)
+str(z)
+
+# Obtaining F probability
+aggregate(resVar~TGroup,data=ANOdata,FUN=mean)
+unlist(z)
+unlist(z)[7]
+ANOsum <- list(Fval=unlist(z)[7],probF=unlist(z)[9])
+ANOsum
+
+```
+
+```
+The minimum sample size for each group is 11 trees. However, this interpretation is not evaluated correctly. There will never be a total of 9 trees with each tree counting towards the damaged and dead categories. 
+```
+
+
+

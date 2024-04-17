@@ -1,0 +1,114 @@
+---
+title: "Homework 8"
+author: "Anushka Canfield"
+date: "2024-03-27"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r, library download}
+
+library(dplyr)
+library(tidyverse)
+
+```
+
+```{r, Import}
+## Import Dataset from R
+iris_R <- iris
+str(iris_R)
+
+```
+```
+There are 150 observations and 5 variables in iris. 
+```
+
+```{r, iris1}
+## Filter for iris1
+
+iris1 <- filter(iris, Species == "virginica" | Species == "versicolor")
+iris1 <- filter(iris1, Sepal.Length > 6)
+iris1 <- filter(iris1, Sepal.Width > 2.5)
+
+str(iris1)
+```
+```
+There are 56 observations and 5 variables in iris1 after filtering. 
+```
+```{r,iris2}
+
+iris2 <- select(iris1, Species, Sepal.Length, Sepal.Width)
+str(iris2)
+
+```
+```
+There are 56 observations and 3 variables in iris2. 
+```
+
+```{r,iris3}
+
+iris3 <- arrange(iris2, by = Sepal.Length, decending = T)
+head(iris3, n=6)
+
+```
+
+```{r, iris4}
+
+iris3$Sepal_area <- iris3$Sepal.Length * iris3$Sepal.Width
+
+iris4 <- iris3
+str(iris4)
+
+```
+```
+There are 56 observations and 4 variables in iris4. 
+```
+
+```{r, iris5}
+
+iris5 <- summarize(iris4, Average_Sepal_Length = mean(Sepal.Length), Average_Sepal_Width = mean(Sepal.Width), Sample_Size = n())
+iris5
+
+```
+
+```{r, iris6}
+
+iris6 <- group_by(iris4,Species)
+
+iris6 <- summarize(iris6, Average_Sepal_Length = mean(Sepal.Length), 
+                   Average_Sepal_Width = mean(Sepal.Width), 
+                   Sample_Size = n())
+
+```
+
+```{r, iris_final}
+
+iris_Final <- iris %>%
+  filter(Species == "virginica" | Species == "versicolor") %>% #iris1
+  filter(Sepal.Length > 6) %>% 
+  filter(Sepal.Width > 2.5) %>%
+  select(Species, Sepal.Length, Sepal.Width) %>%              #iris2
+  arrange(by = Sepal.Length, decending = T) %>%               #iris3
+  group_by(Species) %>%                                       #iris6
+  summarize(Average_Sepal_Length = mean(Sepal.Length), 
+            Average_Sepal_Width = mean(Sepal.Width), 
+            Sample_Size = n())
+
+iris_Final
+
+```
+
+
+```{r,}
+longer_iris <- iris %>%
+  pivot_longer(cols= Sepal.Length:Petal.Width,
+               names_to = "Measure",
+               values_to= "Value",
+               values_drop_na = T)
+
+head(longer_iris)
+```
+

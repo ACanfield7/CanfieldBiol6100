@@ -1,0 +1,117 @@
+---
+title: "Homework 6"
+author: "Anushka Canfield"
+date: "2024-02-21"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## Simulating and Fittinhg Data Distributions
+
+
+```{r}
+z <- read.table("esa.84.2.xml", header=TRUE, sep=",")
+str(z)
+summary(z)
+```
+```{r}
+
+library(ggplot2) # for graphics
+library(MASS) # for maximum likelihood estimation
+
+# quick and dirty, a truncated normal distribution to work on the solution set
+
+z <- rnorm(n=3000,mean=0.2)
+z <- data.frame(1:3000,z)
+names(z) <- list("ID","NEE")
+z <- z[z$NEE>0,]
+str(z)
+summary(z$NEE)
+
+## Plot Histogram of Data
+p1 <- ggplot(data=z, aes(x=NEE, y=after_stat(density))) +  geom_histogram(color="grey60",fill="palegreen",linewidth=0.2, binwidth = 0.05) 
+print(p1)
+
+```
+
+
+```{r}
+## Empirical Density Curve
+
+p1 <-  p1 +  geom_density(linetype="dotted",linewidth=0.75)
+print(p1)
+
+```
+
+```
+## The Empirical Density Curve is the best represented curve for my dataset
+```
+
+```{r}
+## Normal Parameters
+normPars <- fitdistr(z$NEE,"normal")
+print(normPars)
+str(normPars)
+normPars$estimate["mean"] # note structure of getting a named attribute
+
+
+## Plot Normal Probability Density
+meanML <- normPars$estimate["mean"]
+sdML <- normPars$estimate["sd"]
+
+xval <- seq(0,max(z$NEE),len=length(z$NEE))
+
+stat <- stat_function(aes(x = xval, y = after_stat(y)), fun = dnorm, colour="red", n = length(z$NEE), args = list(mean = meanML, sd = sdML))
+p1 + stat
+ 
+```
+
+```{r}
+ ## Plot Exponential Probability Density
+ 
+expoPars <- fitdistr(z$NEE,"exponential")
+rateML <- expoPars$estimate["rate"]
+
+stat2 <- stat_function(aes(x = xval, y = after_stat(y)), fun = dexp, colour="blue", n = length(z$NEE), args = list(rate=rateML))
+p1 + stat + stat2
+
+```
+
+```{r}
+
+## Plot Uniform Probability Density
+stat3 <- stat_function(aes(x = xval, y = after_stat(y)), fun = dunif, colour="black", n = length(z$NEE), args = list(min=min(z$NEE), max=max(z$NEE)))
+p1 + stat + stat2 + stat3
+
+```
+
+```{r}
+## Plot Gamma Probability Density
+
+gammaPars <- fitdistr(z$NEE,"gamma")
+shapeML <- gammaPars$estimate["shape"]
+rateML <- gammaPars$estimate["rate"]
+
+stat4 <- stat_function(aes(x = xval, y = after_stat(y)), fun = dgamma, colour="brown", n = length(z$NEE), args = list(shape=shapeML, rate=rateML))
+ p1 + stat + stat2 + stat3 + stat4
+
+```
+
+```{r}
+ ## Plot Beta Probability Density
+pSpecial <- ggplot(data=z, aes(x=NEE/(max(NEE + 0.1)), y=after_stat(density))) +
+geom_histogram(color="grey60",fill="palegreen",linewidth=0.2) + 
+xlim(c(0,1)) +
+geom_density(linewidth=0.75,linetype="dotted")
+
+betaPars <- fitdistr(x=z$NEE/max(z$NEE + 0.1),start=list(shape1=1,shape2=2),"beta")
+shape1ML <- betaPars$estimate["shape1"]
+shape2ML <- betaPars$estimate["shape2"]
+
+statSpecial <- stat_function(aes(x = xval, y = after_stat(y)), fun = dbeta, colour="orchid", n = length(z$NEE), args = list(shape1=shape1ML,shape2=shape2ML))
+pSpecial + statSpecial
+```
+

@@ -1,0 +1,73 @@
+---
+title: "Homework 09"
+author: "Anushka Canfield"
+date: "2024-04-12"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r}
+library(tidyverse)
+library(readxl)
+library(ggplot2)
+
+```
+
+```{r, Annotated Functions}
+##############################
+# FUNCTION: ANOVA Model Boxplot
+# input: nGroup, nName, nSize, nMean, nSD
+# output: ANOVA Box Plot
+# -------------------
+organizing_data_ANOVA <- function(nGroup, nName, nSize, nMean, nSD){
+  ID <- 1:(sum(nSize))
+  resVar <- c(rnorm(n=nSize[1],mean=nMean[1],sd=nSD[1]),
+            rnorm(n=nSize[2],mean=nMean[2],sd=nSD[2]),
+            rnorm(n=nSize[3],mean=nMean[3],sd=nSD[3]))
+  TGroup <- rep(nName, nSize)
+  ANOdata <- data.frame(ID, TGroup, resVar)
+  ANOmodel <- aov(resVar~TGroup, data = ANOdata)
+  ANOPlot <- ggplot(data=ANOdata,aes(x=TGroup,y=resVar,fill=TGroup)) +
+           geom_boxplot()
+  return(print(ANOPlot))
+}
+##############################
+
+organizing_data_ANOVA(nGroup = 3, 
+                      nName = c("Damaged Tree Count", "Dead Tree Count", "Total Tree Count"), 
+                      nSize =  c(3,3,3),
+                      nMean = c((0.75*6), (0.25*6), 6),
+                      nSD = c((0.75*8), (0.25*8), 8))
+
+```
+
+```{r,}
+##############################
+# FUNCTION: ANOVA Model Boxplot 
+# input: nGroup, nName, nSize, nMean, nSD
+# output: ANOVA Box Plot
+# -------------------
+organizing_data_ANOVA <- function(nGroup, nName, nSize, nMean, nSD){
+  ID <- 1:(sum(nSize))
+  resVar <- c(rnorm(n=nSize[1],mean=nMean[1],sd=nSD[1]),
+            rnorm(n=nSize[2],mean=nMean[2],sd=nSD[2]),
+            rnorm(n=nSize[3],mean=nMean[3],sd=nSD[3]))
+  TGroup <- rep(nName, nSize)
+  ANOdata <- data.frame(ID, TGroup, resVar)
+  ANOmodel <- aov(resVar~TGroup, data = ANOdata)
+  ANOPlot <- ggplot(data=ANOdata,aes(x=TGroup,y=resVar,fill=TGroup)) +
+           geom_boxplot()
+  return(print(ANOPlot))
+}
+##############################
+
+### REPEAT with DIFFERENT DATA INPUT
+organizing_data_ANOVA(nGroup = 3, 
+                      nName = c("Damaged Tree Count", "Dead Tree Count", "Total Tree Count"), 
+                      nSize =  c(54,67,100),
+                      nMean = c(24,45, 6),
+                      nSD = c(4, 5, 9))
+```
