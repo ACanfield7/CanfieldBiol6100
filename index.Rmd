@@ -15,7 +15,7 @@ knitr::opts_chunk$set(echo = TRUE)
 #### **Blurb**
 
 Hello! My name is Anushka and I am a Junior at UVM with a major in Molecular Genetics and a minor in Bioinformatics.
-#
+
 
 #### **Assignments:**
 - [Homework 01]()
