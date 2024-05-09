@@ -1,0 +1,186 @@
+---
+title: "Homework 12"
+author: "Anushka Canfield"
+date: "2024-05-09"
+output: 
+  html_document:
+    toc: true
+    toc_float:
+      collapsed: False
+      smooth_scroll: False
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```
+Dataset Description:
+
+Vero E6 cells (Kidney Cells from Chlorocebus sabaeus, the Green Monkey) are infected with Dengue virus serotype 4 (DENV4) and collected at timestamps day zero and day five.
+
+Samples were collected by Dr.Chatterjee's Lab in the Microbiology and Molecular Genetics Department at the University of Vermont. Sample files and count matrix files were processed and curated by Azenta Life Sciences. 
+
+Samples in this pairwise comparison: 
+- 5 Day No Treatment = 5DNT
+- Control = MNT
+
+The visualization focuses only on the productiono of gplot visualization 
+
+```
+
+
+```{r,message=FALSE}
+library(DESeq2)
+library(dplyr)
+library(tidyr)
+library(ggplot2)
+library(RColorBrewer)
+library(ggplotify)
+library(ggrepel)
+library(clusterProfiler)
+library(ggnewscale) 
+
+```
+## 1. Data Input
+```{r message=FALSE}
+
+## Reading data file
+data <- read.csv(file = "~/Desktop/Dr_Chatterjee/MNT_copy_CSV.csv", header = TRUE, row.names = 1)
+
+## Visualization of data
+head (data)
+dim(data)
+
+# round all expression counts
+data <- round(data)
+
+```
+
+## 2. Meta Input
+```{r, Meta Input}
+
+## Identify Pathway to Connect to Meta File
+meta <- read.csv("~/Desktop/Dr_Chatterjee/denv4_meta_processed.csv", header = TRUE)
+meta
+
+## Coercion of Argument Into Two Levels
+meta$Condition<- as.factor(meta$Condition)
+
+## Verification of change
+str(meta)
+
+## Verification of Same Column and Row Names
+identical(colnames(data), meta$Sample_Name)
+
+```
+
+## 3. DESeq2
+```{r, DESeq2, message= FALSE}
+
+# Allowing DESeq to Read the Count Matrix in Data using Meta for Labeling
+dds <- DESeqDataSetFromMatrix(countData = data, 
+                              colData = meta, 
+                              design= ~Condition)
+
+## Remove low read counts
+keep <- rowSums(counts(dds)) >= 10
+dds <- dds[keep,]
+
+## Reference level
+dds$Condition <- relevel(dds$Condition, ref = "MNT")
+
+
+## Run differential analysis 
+dds <- DESeq(dds)
+res <- results(dds, contrast = c("Condition", "5DNT", "MNT"))
+
+head(res)
+dim(res)
+```
+
+### 4.a Isolation of Genes
+```{r, Gene Id}
+result <- res[order(res$padj), ]
+head(result)
+
+table(result$padj<0.05)
+
+res_data <- merge(as.data.frame(result), as.data.frame(counts(dds, normalized=TRUE)), by="row.names", sort=FALSE)
+
+names(res_data)[1] <- "Gene_id"
+
+```
+
+### 4.b Filter Significant Gene 
+```{r, Signifcant Gene IDS}
+
+## Filtering by log-2-fold-change and p-adjust
+five_DNT_res <- results(dds, contrast = c("Condition", "5DNT", "MNT"))
+five_DNT_sigs <- na.omit(five_DNT_res)
+five_DNT_sigs_subset <- subset(five_DNT_sigs, padj<0.05) 
+five_DNT_sig_data_gene <- merge(as.data.frame(five_DNT_sigs_subset),
+                        as.data.frame(counts(dds, normalized = TRUE)), 
+                        by = "row.names", sort = FALSE)
+names(five_DNT_sig_data_gene)[1] <- "symbol_ID"
+five_DNT_res_data_gene <- merge(as.data.frame(five_DNT_res),
+                        as.data.frame(counts(dds, normalized=TRUE)),
+                        by= "row.names", sort=FALSE)
+
+names(five_DNT_res_data_gene)[1] <- "symbol_ID"
+
+# Confirmation through visualization of dataframes
+head(five_DNT_res_data_gene)
+str(five_DNT_res_data_gene)
+```
+
+### 4.c Visualization of Significant Genes
+```{r, Volcano plot padj 0.05}
+
+#Acquire the correct data variable
+volcano_data <- na.omit(res_data)
+
+#Add a column to dataframe to specify up or down regulated
+volcano_data$diffexpressed <- "Not Significant"
+
+#if log2FC > 1 and padj < 0.05 set as upregulated
+volcano_data$diffexpressed[volcano_data$padj < 0.05 & volcano_data$log2FoldChange > 1.5] <- "Upregulated"
+
+#if log2FC > -1 and padj < 0.05 set as downregulated
+volcano_data$diffexpressed[volcano_data$padj < 0.05 & volcano_data$log2FoldChange < -1.5] <- "Downregulated"
+
+# Visualize the filter and write file
+head(volcano_data)
+write.csv(volcano_data, file="5DNT_versus_MNT_volcano_padj0.05.csv")
+
+
+# Count the number of rows where diffexpressed is "Upregulated"
+upregulated_count <- nrow(volcano_data[volcano_data$diffexpressed == "Upregulated", ])
+upregulated_count
+
+downregulated_count <- nrow(volcano_data[volcano_data$diffexpressed == "Downregulated", ])
+downregulated_count
+
+
+# Visualze volcano plot
+five_DNT_volcano_padj0.05 <- ggplot(volcano_data) +
+  geom_point(aes(x=log2FoldChange, y=-log10(padj), colour=diffexpressed)) +
+  geom_text_repel(data = volcano_data %>%
+                    filter(Gene_id %in% c("CCL5", "SERPINA5","RRM2", "LCE3B")), 
+                  aes(label = Gene_id, x = log2FoldChange, y =-log10(padj)), box.padding = unit(.7, "lines"),hjust= 0.30) +
+  theme_classic() + 
+  ggtitle("5DNT vs MNT") +
+  xlab("Log2 fold change") + 
+  ylab("-Log10(padj)") +
+  theme(legend.position = "right",
+        plot.title = element_text(size = rel(1.25), hjust = 0.5), 
+        axis.title = element_text(size = rel(1.25))) + 
+  scale_color_manual(values = c("blue", "black", "red"),
+                     labels = c("Downregulated", "Not Significant", "Upregulated")) + 
+  scale_x_continuous(limits = c(-12,12)) +
+  coord_cartesian(ylim = c(0, 300), clip = "off")
+
+# Add annotation
+five_DNT_volcano_padj0.05 + annotate ("text", x = 8, y = 10, label = "982", colour = "red", size = 8, hjust = 0) +
+  annotate("text", x = -10, y = 10, label = "424", colour = "blue", size = 8, hjust = 0.5)
+```
