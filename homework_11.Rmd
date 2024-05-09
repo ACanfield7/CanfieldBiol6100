@@ -10,3 +10,103 @@ knitr::opts_chunk$set(echo = TRUE)
 ```
 
 
+```{r}
+
+library(log4r)
+library(TeachingDemos)
+library(tidyverse)
+library(pracma)
+library(ggmosaic)
+library(stringr)
+
+```
+
+```{r,}
+source("barracudar/DataTableTemplate.R")
+source("barracudar/AddFolder.R")
+source("barracudar/BuildFunction.R")
+source("barracudar/MetaDataTemplate.R")
+source("barracudar/CreatePaddedLabel.R")
+source("barracudar/InitiateSeed.R")
+source("barracudar/SetUpLog.R")
+source("barracudar/SourceBatch.R")
+
+source("barracudar/QBox.R")
+source("barracudar/QCon1.R")
+source("barracudar/QCon2.R")
+source("barracudar/QHist.R")
+source("barracudar/QLogis.R")
+source("barracudar/QScat.R")
+source("barracudar/QBub.R")
+source("barracudar/QContour.R")
+
+initiate_seed()
+set_up_log()
+
+
+```
+
+```{r}
+
+my_files <- list.files(path = "~/Desktop/Repository/CanfieldBiol6100/OriginalData/Neon",
+                       pattern = "BART")
+
+
+##############################
+# FUNCTION: Batch Information Processing
+# input: Pathway and Pattern
+# output: Summary Satistics 
+# -------------------
+
+get_information <- function(path_input, pattern_input){
+  setwd(path_input)
+  my_files <- list.files(path = path_input,
+                       pattern = pattern_input )
+# Within each year’s folder, you will only be using a file from each year labeled “countdata” in its title. Using for loops, iterate through each year’s folders to gather the file names of these “countdata” .csv files.
+
+  for (i in my_files){
+  file_countdata <- c(my_files, list.files(pattern = "countdata"))
+  
+# Starting with pseudo-code, generate functions for: 
+  
+  dataset <- read.csv(i)
+  dataset <- na.omit(dataset)                         # 1) Cleaning the data for any empty/missing cases
+  year <- str_extract(basename(i), "\\d{4}-\\d{2}")   # 2) Extract the year from each file name
+  species_abundance <- nrow(dataset)                  # 3) Calculate Abundance for each year
+  richness <- length(unique(datasete$scientificName)) # 4) Calculate Species Richness for each year
+  
+# Create an initial empty data frame to hold the above summary statistics-you should have 4 columns, one for the file name, one for abundance, one for species richness, and one for year.
+  
+  }
+  
+  summary_stats <- data.frame(file_name = character(),
+                              year = character(),
+                              abundance = numeric(),
+                              richness = numeric())
+  
+  my_results <- rbind(summary_stats, list(File= file_countdata,
+                                    year= year,
+                                    abundance = species_abundance,
+                                    richness= richness))
+  }
+  return(abundance)
+}
+
+##############################
+
+get_information("~/Desktop/Repository/CanfieldBiol6100/OriginalData", "BART")
+
+```
+
+```{r}
+
+
+
+
+
+
+
+
+```
+
+
