@@ -14,8 +14,7 @@ knitr::opts_chunk$set(echo = TRUE)
 
 #### **Blurb**
 
-Hello! My name is Anushka and I am a Junior at UVM with a major in Molecular Genetics and a minor in Bioinformatics. I plan to graduate Fall 2024 and I will hopefully get accepted into a PHD research program.
-
+Hello! My name is Anushka and I am a Junior at UVM with a major in Molecular Genetics and a minor in Bioinformatics.
 #
 
 #### **Assignments:**
@@ -28,7 +27,7 @@ Hello! My name is Anushka and I am a Junior at UVM with a major in Molecular Gen
 - [Homework 07](homework_7.html)
 - [Homework 08](homework_8.html)
 - [Homework 09](homework_09.html)
-- Homework 10
+- [Homework 10](homework_10.html)
 - Homework 11
 - Homework 12
 

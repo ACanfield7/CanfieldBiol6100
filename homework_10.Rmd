@@ -56,53 +56,72 @@ make_a_matrix(vector = my_list, nRow = 5, nCol = 6)
 
 ```{r}
 
-Write a custom function that 1) reshuffles the response variable, and 2) calculates the mean of each group in the reshuffled data. Store the means in a vector of length 3.
-
 ##############################
 # FUNCTION: Reshuffle Data
 # input: Response Variables
 # output: a Vector
 # -------------------
 reshuffle_data <- function(dataset){
-  shuffle <- sample(dataset)
-  mean = colMeans(dataset)
-  return(mean)
+  shuffle_r <- sample(dataset$response)
+  dataset$shuffle <- shuffle_r
+  split_df <- aggregate(shuffle_r ~ group_name, dataset, mean)
+  split_list <- as.list(split_df)
+  return (split_list)
+  
 }
 
-simulte_dataset <- data.frame(group1, group2, group3)
-reshuffle_data(simulte_dataset)
+group1 <- runif(100)
+group2 <- runif(100)
+group3 <- runif(100)
+  
+simulate_dataset <- data.frame(group_name = rep(c("group1", "group2", "group3"), each = 100),
+                               response = c(group1, group2, group3))
+
+reshuffle_data(simulate_dataset)
 
 
 ```
 
 
 ```{r}
-
 ##############################
-# FUNCTION: Reshuffle Data Using For Loop
+# FUNCTION: Repeat Reshuffle Data n Times
 # input: Response Variables
 # output: a Vector
 # -------------------
-reshuffle_data <- function(dataset){
-  list <- list()
-  for (i in colnames(dataset)) {
-    shuffle <- sample(dataset$i)
-    mean_data <- mean(shuffle)
-    final_list <- append(list, mean_data)
+
+repeat_reshuffle <- function(dataset, repeats) {
+  mean_matrix <- data.frame(matrix(nrow = repeats,ncol=4))
+  colnames(mean_matrix) <- c("replicate", "group 1", "group 2", "group 3")
+  for (i in 1:repeats) {
+    reshuffle <- reshuffle_data(dataset)
+    mean_matrix[i,1:4] <- c(i,reshuffle$shuffle_r)
+    
   }
-  
-  return(final_list)
+  return(mean_matrix)
 }
-##############################
 
+num = 100
+repeat_reshuffle(simulate_dataset, num)
 
-group1 <- runif(100)
-group2 <- runif(100)
-group3 <- runif(100)
+    
+```
 
-simulte_dataset <- data.frame(group1, group2, group3)
-reshuffle_data(simulte_dataset)
+```{r,}
+#Use qplot() to create a histogram of the means for each reshuffled group. Or, if you want a challenge, use ggplot() to overlay all 3 histograms in the same figure. How do the distributions of reshuffled means compare to the original means?
 
+library(ggplot2)
+
+num = 100
+df_new <- repeat_reshuffle(simulate_dataset, num)
+
+g1 <- ggplot(df_new) + aes(x=group1) + geom_histogram(fill="blue",color="navy")
+
+g2 <- ggplot(df_new) + aes(x=group2) + geom_histogram(fill="red",color="purple")
+
+g3 <- ggplot(df_new) + aes(x=group3) + geom_histogram(fill="orange",color="brown")
+
+g1 + g2 + g3 + plot_layout(ncol=1)
 
 ```
 
